@@ -24,5 +24,8 @@ func GetPublicAddrWithDNS() (string, error) {
 	ipaddr, _ := resolver.LookupIPAddr(ctx, "myip.opendns.com")
 	reg, _ := regexp.Compile("{(.*)}")
 	ipaddrStr := reg.FindStringSubmatch(fmt.Sprintf("%v", ipaddr[0]))[1]
+	if net.ParseIP(ipaddrStr) == nil {
+		return "", errors.New("Couldn't resolve public ip address")
+	}
 	return ipaddrStr, nil
 }
